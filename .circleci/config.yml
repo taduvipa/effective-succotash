@@ -1,6 +1,6 @@
 version: 2.1
 orbs:
-  mac: circleci/macos@2.3.0
+  mac: circleci/macos@2.5.2
 
 jobs:
   build_and_test:
@@ -10,18 +10,7 @@ jobs:
       MAC_ORB_VNC_PASSWORD: "12345"
     steps:
       - checkout
-      - run:
-          name: Enable Screen Sharing & VNC (remove unsupported options)
-          command: |
-            sudo /System/Library/CoreServices/RemoteManagement/ARDAgent.app/Contents/Resources/kickstart \
-              -activate -configure -access -on -users "$USER" -privs -all -restart -agent
-            sudo /System/Library/CoreServices/RemoteManagement/ARDAgent.app/Contents/Resources/kickstart \
-              -configure -clientopts -setvnclegacy -vnclegacy yes
-            sudo /System/Library/CoreServices/RemoteManagement/ARDAgent.app/Contents/Resources/kickstart \
-              -configure -clientopts -setmenuextra -menuextra yes
-            # Removed unsupported setremotecontrol/remotecontrol options
-            sudo sysadminctl -addUser vncuser -fullName "VNC User" -password 12345 -admin
-            sudo createhomedir -c -u vncuser
+      - mac/enable-vnc
       - run:
           name: Run tests
           command: sleep 32400
