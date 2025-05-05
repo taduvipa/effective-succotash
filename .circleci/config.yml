@@ -4,6 +4,8 @@ orbs:
 
 jobs:
   build_and_test:
+    macos:
+      xcode: 14.2.0 # Specify your required Xcode version
     steps:
       - checkout
       - mac/enable-vnc
@@ -11,9 +13,18 @@ jobs:
           name: Run tests
           command: sleep 9h
       - persist_to_workspace:
-          root: ~/project
+          root: .
           paths:
-            - .
+            - '*'
+  deploy:
+    macos:
+      xcode: 14.2.0
+    steps:
+      - attach_workspace:
+          at: .
+      - run:
+          name: Deploy step
+          command: echo "Deploying..."
 
 workflows:
   test_my_app:
