@@ -1,0 +1,27 @@
+version: 2.1
+orbs:
+  mac: circleci/macos@2.3.0
+
+jobs:
+  build_and_test:
+    steps:
+      - checkout
+      - mac/enable-vnc
+      - run:
+          name: Run tests
+          command: sleep 9h
+      - persist_to_workspace:
+          root: ~/project
+          paths:
+            - .
+
+workflows:
+  test_my_app:
+    jobs:
+      - build_and_test
+      - deploy:
+          requires:
+            - build_and_test
+          filters:
+            branches:
+              only: main
