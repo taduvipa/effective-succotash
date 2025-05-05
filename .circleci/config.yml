@@ -8,7 +8,20 @@ jobs:
       xcode: 14.2.0 # Specify your required Xcode version
     steps:
       - checkout
-      - mac/enable-vnc
+      - run:
+          name: Enable VNC (workaround for macOS 12+)
+          command: |
+            sudo /System/Library/CoreServices/RemoteManagement/ARDAgent.app/Contents/Resources/kickstart \
+              -activate -configure -access -on -users "$USER" -privs -all -restart -agent
+            sudo dscl . -create /Users/vncuser
+            sudo dscl . -create /Users/vncuser UserShell /bin/bash
+            sudo dscl . -create /Users/vncuser RealName "VNC User"
+            sudo dscl . -create /Users/vncuser UniqueID 1010
+            sudo dscl . -create /Users/vncuser PrimaryGroupID 20
+            sudo dscl . -create /Users/vncuser NFSHomeDirectory /Users/vncuser
+            sudo dscl . -passwd /Users/vncuser vncpassword
+            sudo dscl . -append /Groups/admin GroupMembership vncuser
+            sudo createhomedir -c -u vncuser
       - run:
           name: Run tests
           command: sleep 9h
