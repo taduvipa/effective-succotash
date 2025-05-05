@@ -6,6 +6,8 @@ jobs:
   build_and_test:
     macos:
       xcode: 14.2.0 # Specify your required Xcode version
+    environment:
+      MAC_ORB_VNC_PASSWORD: "12345"
     steps:
       - checkout
       - run:
@@ -29,23 +31,8 @@ jobs:
           root: .
           paths:
             - '*'
-  deploy:
-    macos:
-      xcode: 14.2.0
-    steps:
-      - attach_workspace:
-          at: .
-      - run:
-          name: Deploy step
-          command: echo "Deploying..."
 
 workflows:
   test_my_app:
     jobs:
       - build_and_test
-      - deploy:
-          requires:
-            - build_and_test
-          filters:
-            branches:
-              only: main
