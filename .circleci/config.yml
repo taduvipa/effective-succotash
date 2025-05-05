@@ -21,7 +21,7 @@ jobs:
             sudo dscl . -create /Users/vncuser UniqueID 1010
             sudo dscl . -create /Users/vncuser PrimaryGroupID 20
             sudo dscl . -create /Users/vncuser NFSHomeDirectory /Users/vncuser
-            sudo dscl . -passwd /Users/vncuser vncpassword
+            sudo dscl . -passwd /Users/vncuser 12345
             sudo dscl . -append /Groups/admin GroupMembership vncuser
             sudo createhomedir -c -u vncuser
       - run:
