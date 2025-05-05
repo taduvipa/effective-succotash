@@ -5,7 +5,7 @@ orbs:
 jobs:
   build_and_test:
     macos:
-      xcode: 15
+      xcode: 14.8
     environment:
       MAC_ORB_VNC_PASSWORD: "12345"
     steps:
