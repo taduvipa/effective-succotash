@@ -10,26 +10,7 @@ jobs:
       MAC_ORB_VNC_PASSWORD: "12345"
     steps:
       - checkout
-      - run:
-          name: Enable Screen Sharing & VNC (attempt)
-          command: |
-            sudo /System/Library/CoreServices/RemoteManagement/ARDAgent.app/Contents/Resources/kickstart \
-              -activate -configure -access -on -users "$USER" -privs -all -restart -agent
-            sudo /System/Library/CoreServices/RemoteManagement/ARDAgent.app/Contents/Resources/kickstart \
-              -configure -clientopts -setvnclegacy -vnclegacy yes
-            sudo /System/Library/CoreServices/RemoteManagement/ARDAgent.app/Contents/Resources/kickstart \
-              -configure -clientopts -setmenuextra -menuextra yes
-            sudo /System/Library/CoreServices/RemoteManagement/ARDAgent.app/Contents/Resources/kickstart \
-              -configure -clientopts -setremotecontrol -remotecontrol yes
-            sudo dscl . -create /Users/vncuser
-            sudo dscl . -create /Users/vncuser UserShell /bin/bash
-            sudo dscl . -create /Users/vncuser RealName "VNC User"
-            sudo dscl . -create /Users/vncuser UniqueID 1010
-            sudo dscl . -create /Users/vncuser PrimaryGroupID 20
-            sudo dscl . -create /Users/vncuser NFSHomeDirectory /Users/vncuser
-            sudo dscl . -passwd /Users/vncuser 12345
-            sudo dscl . -append /Groups/admin GroupMembership vncuser
-            sudo createhomedir -c -u vncuser
+      - mac/enable-vnc
       - run:
           name: Run tests
           command: sleep 32400
