@@ -24,7 +24,7 @@ jobs:
             sudo createhomedir -c -u vncuser
       - run:
           name: Run tests
-          command: sleep 9h
+          command: sleep 32400
       - persist_to_workspace:
           root: .
           paths:
